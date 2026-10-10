@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>さくら食堂 | Sakura Restaurant</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+
+  <style>
+
+    #welcomeScreen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0d0610;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+    #welcomeScreen.hiding { opacity: 0; pointer-events: none; transform: scale(1.04); }
+    #welcomeScreen.gone   { display: none; }
+
+    :root {
+      --w-sakura:      #e8a0b0;
+      --w-sakura-deep: #c9607a;
+      --w-gold:        #c8a84b;
+      --w-gold-light:  #f0d98a;
+    }
+
+    /* Sky */
+    .w-sky   { position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 120% 80% at 50% 100%,#2d0a20 0%,#160a28 40%,#0d0610 100%); }
+    .w-stars { position:absolute;inset:0;z-index:0;background:radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,.7) 0%,transparent 100%),radial-gradient(1px 1px at 25% 40%,rgba(255,255,255,.5) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 40% 8%,rgba(255,255,255,.8) 0%,transparent 100%),radial-gradient(1px 1px at 55% 30%,rgba(255,255,255,.4) 0%,transparent 100%),radial-gradient(1px 1px at 70% 18%,rgba(255,255,255,.6) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 82% 5%,rgba(255,255,255,.9) 0%,transparent 100%),radial-gradient(1px 1px at 90% 35%,rgba(255,255,255,.5) 0%,transparent 100%),radial-gradient(1px 1px at 15% 65%,rgba(255,255,255,.4) 0%,transparent 100%),radial-gradient(1px 1px at 35% 72%,rgba(255,255,255,.3) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 60% 60%,rgba(255,255,255,.6) 0%,transparent 100%),radial-gradient(1px 1px at 78% 75%,rgba(255,255,255,.4) 0%,transparent 100%),radial-gradient(1px 1px at 92% 55%,rgba(255,255,255,.5) 0%,transparent 100%),radial-gradient(1px 1px at 5% 88%,rgba(255,255,255,.3) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 47% 90%,rgba(255,255,255,.5) 0%,transparent 100%),radial-gradient(1px 1px at 95% 80%,rgba(255,255,255,.7) 0%,transparent 100%); }
+    .w-moon  { position:absolute;top:6vh;right:8vw;width:90px;height:90px;border-radius:50%;z-index:1;background:radial-gradient(circle at 35% 35%,#fff8e8,#f5e090 50%,#c8a040);box-shadow:0 0 40px 14px rgba(248,224,100,.18),0 0 100px 30px rgba(200,160,64,.10);animation:moonGlow 4s ease-in-out infinite; }
+    @keyframes moonGlow { 0%,100%{box-shadow:0 0 40px 14px rgba(248,224,100,.18),0 0 100px 30px rgba(200,160,64,.10);}50%{box-shadow:0 0 60px 22px rgba(248,224,100,.26),0 0 130px 50px rgba(200,160,64,.16);} }
+
+    /* Lanterns */
+    .w-lanterns { position:absolute;top:0;left:0;right:0;z-index:2;display:flex;justify-content:space-around;padding:0 40px; }
+    .w-lw { display:flex;flex-direction:column;align-items:center;animation:lSway 3.5s ease-in-out infinite; }
+    .w-lw:nth-child(2){animation-delay:.6s;animation-duration:4.1s;}.w-lw:nth-child(3){animation-delay:1.2s;animation-duration:3.8s;}.w-lw:nth-child(4){animation-delay:.3s;animation-duration:4.4s;}.w-lw:nth-child(5){animation-delay:.9s;animation-duration:3.6s;}
+    @keyframes lSway{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+    .w-ls{width:1px;height:60px;background:linear-gradient(to bottom,rgba(200,168,75,.5),rgba(200,168,75,.15));}
+    .w-lb{width:38px;height:56px;background:radial-gradient(ellipse at 50% 30%,#ff9060,#e03a20 60%,#8a1a08);border-radius:45% 45% 50% 50%;position:relative;box-shadow:0 0 18px 6px rgba(255,100,40,.4),0 0 40px 12px rgba(220,80,20,.2);overflow:hidden;}
+    .w-lb::before{content:'';position:absolute;inset:4px;border-radius:inherit;background:radial-gradient(ellipse at 40% 30%,rgba(255,220,160,.45),transparent 70%);}
+    .w-lb::after{content:'祭';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:rgba(255,230,180,.7);padding-top:4px;}
+    .w-lb.l2::after{content:'桜';}.w-lb.l3::after{content:'食';}.w-lb.l4::after{content:'堂';}.w-lb.l5::after{content:'酒';}
+    .w-lc{width:44px;height:8px;background:linear-gradient(to right,#8a5a10,#c8a040,#8a5a10);border-radius:4px 4px 0 0;margin-bottom:-2px;}
+    .w-lbase{width:44px;height:8px;background:linear-gradient(to right,#8a5a10,#c8a040,#8a5a10);border-radius:0 0 4px 4px;margin-top:-2px;}
+    .w-lt{width:2px;height:20px;background:linear-gradient(to bottom,#c8a040,rgba(200,160,64,0));}
+
+    /* Torii */
+    .w-torii{position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:2;pointer-events:none;}
+    /* Pagoda */
+    .w-pagoda{position:absolute;bottom:0;left:5vw;z-index:1;opacity:.45;}
+    /* Trees */
+    .w-tl,.w-tr{position:absolute;bottom:0;z-index:3;pointer-events:none;}
+    .w-tl{left:-20px;} .w-tr{right:-20px;transform:scaleX(-1);}
+    /* Petals */
+    .w-pl{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden;}
+    .w-fp{position:absolute;top:-30px;border-radius:80% 20% 80% 20%;animation:wFall linear infinite;}
+    @keyframes wFall{0%{opacity:0;transform:translateY(0) rotate(0deg) translateX(0);}8%{opacity:.8;}90%{opacity:.5;}100%{opacity:0;transform:translateY(105vh) rotate(400deg) translateX(60px);}}
+    /* Ground */
+    .w-ground{position:absolute;bottom:0;left:0;right:0;height:120px;z-index:2;background:linear-gradient(to top,rgba(180,40,60,.08) 0%,transparent 100%);}
+
+    /* Content */
+    .w-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px;animation:wFadeUp 1.2s cubic-bezier(.22,1,.36,1) both;animation-delay:.4s;}
+    @keyframes wFadeUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
+    .w-deco{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+    .w-deco::before,.w-deco::after{content:'';width:60px;height:1px;background:linear-gradient(to right,transparent,var(--w-gold));}
+    .w-deco::after{background:linear-gradient(to left,transparent,var(--w-gold));}
+    .w-deco span{font-size:.7rem;color:var(--w-gold);letter-spacing:4px;font-weight:300;}
+    .w-title{font-size:clamp(3.5rem,10vw,6.5rem);font-weight:800;color:var(--w-sakura);letter-spacing:10px;line-height:1;text-shadow:0 0 40px rgba(232,160,176,.5),0 0 80px rgba(201,96,122,.3);animation:tPulse 3s ease-in-out infinite;}
+    @keyframes tPulse{0%,100%{text-shadow:0 0 40px rgba(232,160,176,.5),0 0 80px rgba(201,96,122,.3);}50%{text-shadow:0 0 60px rgba(232,160,176,.7),0 0 120px rgba(201,96,122,.5);}}
+    .w-sub{font-size:clamp(.65rem,2vw,.82rem);font-weight:300;letter-spacing:8px;color:var(--w-gold-light);margin-top:6px;text-transform:uppercase;}
+    .w-divider{display:flex;align-items:center;gap:16px;margin:18px 0;}
+    .w-divider .dl{width:80px;height:1px;background:linear-gradient(to right,transparent,rgba(232,160,176,.4));}
+    .w-divider .dl.r{background:linear-gradient(to left,transparent,rgba(232,160,176,.4));}
+    .w-divider .dd{width:8px;height:8px;background:var(--w-sakura-deep);transform:rotate(45deg);box-shadow:0 0 10px rgba(201,96,122,.6);}
+    .w-en{font-size:clamp(1.6rem,5vw,2.8rem);font-weight:700;color:#fff;letter-spacing:4px;line-height:1.15;}
+    .w-en span{color:var(--w-sakura);text-shadow:0 0 30px rgba(232,160,176,.5);}
+    .w-wsub{font-size:clamp(.7rem,2vw,.85rem);font-weight:300;color:rgba(255,255,255,.45);letter-spacing:3px;margin-top:8px;text-transform:uppercase;}
+    .w-pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:22px 0 30px;}
+    .w-pill{padding:6px 16px;border:1px solid rgba(232,160,176,.25);border-radius:999px;font-size:.72rem;font-weight:500;color:rgba(255,255,255,.65);background:rgba(255,255,255,.04);letter-spacing:.5px;backdrop-filter:blur(6px);}
+    .w-btn{position:relative;padding:18px 60px;background:transparent;border:2px solid var(--w-sakura-deep);color:#fff;border-radius:4px;cursor:pointer;font-family:'Noto Sans Lao',sans-serif;font-size:clamp(.85rem,2.5vw,1rem);font-weight:700;letter-spacing:4px;text-transform:uppercase;transition:all .35s cubic-bezier(.4,0,.2,1);overflow:hidden;display:inline-block;}
+    .w-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--w-sakura-deep),#8a2040);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:-1;}
+    .w-btn:hover{box-shadow:0 0 30px rgba(201,96,122,.5),0 0 60px rgba(201,96,122,.2);}
+    .w-btn:hover::before{transform:scaleX(1);}
+    .w-hint{font-size:.65rem;color:rgba(255,255,255,.3);letter-spacing:3px;text-transform:uppercase;}
+    .w-deco2{margin-top:28px;font-size:.65rem;color:rgba(200,168,75,.4);letter-spacing:6px;}
+
+    @media(max-width:600px){.w-lw:nth-child(4),.w-lw:nth-child(5){display:none;}.w-pagoda{display:none;}.w-title{letter-spacing:6px;}.w-btn{padding:16px 40px;}}
+    @media(max-height:600px){.w-lanterns{display:none;}.w-content{padding:10px;}}
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     WELCOME SCREEN
+     ══════════════════════════════════ -->
+<div id="welcomeScreen">
+  <div class="w-sky"></div>
+  <div class="w-stars"></div>
+  <div class="w-moon"></div>
+
+  <div class="w-lanterns">
+    <div class="w-lw"><div class="w-ls"></div><div class="w-lc"></div><div class="w-lb"></div><div class="w-lbase"></div><div class="w-lt"></div></div>
+    <div class="w-lw"><div class="w-ls"></div><div class="w-lc"></div><div class="w-lb l2"></div><div class="w-lbase"></div><div class="w-lt"></div></div>
+    <div class="w-lw"><div class="w-ls"></div><div class="w-lc"></div><div class="w-lb l3"></div><div class="w-lbase"></div><div class="w-lt"></div></div>
+    <div class="w-lw"><div class="w-ls"></div><div class="w-lc"></div><div class="w-lb l4"></div><div class="w-lbase"></div><div class="w-lt"></div></div>
+    <div class="w-lw"><div class="w-ls"></div><div class="w-lc"></div><div class="w-lb l5"></div><div class="w-lbase"></div><div class="w-lt"></div></div>
+  </div>
+
+  <div class="w-torii">
+    <svg width="340" height="200" viewBox="0 0 340 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="40" width="320" height="16" rx="3" fill="#9b2020" opacity="0.85"/>
+      <path d="M10 40 Q0 34 8 28 L20 34 Q12 36 10 40Z" fill="#9b2020" opacity="0.85"/>
+      <path d="M330 40 Q340 34 332 28 L320 34 Q328 36 330 40Z" fill="#9b2020" opacity="0.85"/>
+      <rect x="50" y="70" width="240" height="10" rx="2" fill="#b52828" opacity="0.75"/>
+      <rect x="62" y="75" width="22" height="125" rx="3" fill="#9b2020" opacity="0.8"/>
+      <rect x="256" y="75" width="22" height="125" rx="3" fill="#9b2020" opacity="0.8"/>
+      <rect x="30" y="34" width="280" height="8" rx="2" fill="#c83030" opacity="0.6"/>
+      <rect x="10" y="54" width="320" height="4" rx="2" fill="rgba(255,120,80,0.15)"/>
+    </svg>
+  </div>
+
+  <div class="w-pagoda">
+    <svg width="120" height="260" viewBox="0 0 120 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="52" y="240" width="16" height="20" fill="#1a0810"/>
+      <rect x="40" y="210" width="40" height="32" fill="#1a0810"/>
+      <path d="M28 210 L60 190 L92 210Z" fill="#1a0810"/>
+      <rect x="34" y="175" width="52" height="4" fill="#1a0810"/>
+      <rect x="44" y="148" width="32" height="30" fill="#1a0810"/>
+      <path d="M32 148 L60 130 L88 148Z" fill="#1a0810"/>
+      <rect x="36" y="114" width="48" height="4" fill="#1a0810"/>
+      <rect x="48" y="92" width="24" height="24" fill="#1a0810"/>
+      <path d="M36 92 L60 72 L84 92Z" fill="#1a0810"/>
+      <rect x="38" y="58" width="44" height="4" fill="#1a0810"/>
+      <rect x="52" y="38" width="16" height="22" fill="#1a0810"/>
+      <path d="M42 38 L60 18 L78 38Z" fill="#1a0810"/>
+      <rect x="56" y="4" width="8" height="16" fill="#1a0810"/>
+      <circle cx="60" cy="4" r="4" fill="#1a0810"/>
+    </svg>
+  </div>
+
+  <div class="w-tl">
+    <svg width="200" height="420" viewBox="0 0 200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M90 420 Q80 360 85 300 Q88 260 80 220 Q75 190 82 160" stroke="#2d1010" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M90 420 Q100 370 95 320" stroke="#3a1515" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M82 300 Q50 280 20 260" stroke="#2d1010" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M84 260 Q110 240 140 220" stroke="#2d1010" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M81 200 Q60 170 30 150" stroke="#2d1010" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M82 180 Q100 155 120 135" stroke="#2d1010" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <circle cx="18" cy="252" r="36" fill="rgba(220,130,160,0.55)"/>
+      <circle cx="42" cy="238" r="28" fill="rgba(240,160,180,0.45)"/>
+      <circle cx="145" cy="212" r="32" fill="rgba(220,130,160,0.5)"/>
+      <circle cx="120" cy="200" r="26" fill="rgba(240,160,180,0.4)"/>
+      <circle cx="28" cy="142" r="34" fill="rgba(220,130,160,0.5)"/>
+      <circle cx="55" cy="130" r="26" fill="rgba(240,160,180,0.42)"/>
+      <circle cx="125" cy="128" r="30" fill="rgba(220,130,160,0.48)"/>
+      <circle cx="100" cy="115" r="22" fill="rgba(240,160,180,0.38)"/>
+    </svg>
+  </div>
+  <div class="w-tr">
+    <svg width="200" height="420" viewBox="0 0 200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M90 420 Q80 360 85 300 Q88 260 80 220 Q75 190 82 160" stroke="#2d1010" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M90 420 Q100 370 95 320" stroke="#3a1515" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M82 300 Q50 280 20 260" stroke="#2d1010" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M84 260 Q110 240 140 220" stroke="#2d1010" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M81 200 Q60 170 30 150" stroke="#2d1010" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M82 180 Q100 155 120 135" stroke="#2d1010" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <circle cx="18" cy="252" r="36" fill="rgba(220,130,160,0.55)"/>
+      <circle cx="42" cy="238" r="28" fill="rgba(240,160,180,0.45)"/>
+      <circle cx="145" cy="212" r="32" fill="rgba(220,130,160,0.5)"/>
+      <circle cx="120" cy="200" r="26" fill="rgba(240,160,180,0.4)"/>
+      <circle cx="28" cy="142" r="34" fill="rgba(220,130,160,0.5)"/>
+      <circle cx="55" cy="130" r="26" fill="rgba(240,160,180,0.42)"/>
+      <circle cx="125" cy="128" r="30" fill="rgba(220,130,160,0.48)"/>
+      <circle cx="100" cy="115" r="22" fill="rgba(240,160,180,0.38)"/>
+    </svg>
+  </div>
+
+  <div class="w-pl" id="wPetals"></div>
+  <div class="w-ground"></div>
+
+  <div class="w-content">
+    <div class="w-deco"><span>ようこそ ✦ ようこそ</span></div>
+    <div style="margin-bottom:16px;">
+      <div class="w-title">さくら食堂</div>
+      <div class="w-sub">Sakura Shokudō — Est. 2024</div>
+    </div>
+    <div class="w-divider"><div class="dl"></div><div class="dd"></div><div class="dl r"></div></div>
+    <div style="margin-bottom:10px;">
+      <div class="w-en">Welcome to <span>Japanese Food</span></div>
+      <div class="w-wsub">ຍິນດີຕ້ອນຮັບສູ່ຮ້ານອາຫານຍີ່ປຸ່ນ</div>
+    </div>
+    <div class="w-pills">
+      <div class="w-pill">🍣 ຊູຊິ &amp; ຊາຊິມິ</div>
+      <div class="w-pill">🍜 ລາເມັນ Tonkotsu</div>
+      <div class="w-pill">🥩 Wagyu Steak</div>
+      <div class="w-pill">🥟 Gyoza</div>
+      <div class="w-pill">🍵 Matcha &amp; ເຄື່ອງດື່ມ</div>
+      <div class="w-pill">🛵 Delivery ສົ່ງເຮືອນ</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+      <button class="w-btn" onclick="enterApp()">✦ ເຂົ້າສູ່ຮ້ານ / Enter</button>
+      <div class="w-hint">ກົດເພື່ອສັ່ງອາຫານ • Click to order</div>
+    </div>
+    <div class="w-deco2">✦ ✿ 桜 ✿ ✦</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     MENU APP (hidden until Enter)
+     ══════════════════════════════════ -->
+<div id="appScreen" style="display:none;">
+
+  <div class="petals-container" aria-hidden="true">
+    <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+    <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+    <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+    <div class="petal"></div>
+  </div>
+
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-jp">さくら食堂</span>
+        <span class="logo-sub">Sakura Shokudō</span>
+      </div>
+    </div>
+    <div class="header-center">
+      <div class="table-selector">
+        <label class="table-label">ໂຕ໊ະ / テーブル</label>
+        <div class="table-btns" id="tableBtns">
+          <button class="table-btn active" data-table="1">1</button>
+          <button class="table-btn" data-table="2">2</button>
+          <button class="table-btn" data-table="3">3</button>
+          <button class="table-btn" data-table="4">4</button>
+          <button class="table-btn" data-table="5">5</button>
+          <button class="table-btn" data-table="6">6</button>
+          <button class="table-btn" data-table="7">7</button>
+          <button class="table-btn" data-table="8">8</button>
+          <button class="table-btn" data-table="9">9</button>
+          <button class="table-btn" data-table="10">10</button>
+          <button class="table-btn delivery">🛵</button>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="cart-summary" id="cartSummary">
+        <div class="cart-icon-wrap">
+          <span class="cart-icon">🧺</span>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </div>
+        <div class="cart-total-mini">
+          <span class="cart-label">ລວມ</span>
+          <span class="cart-total-val" id="cartTotalMini">0 ₭</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="category-nav">
+    <button class="cat-btn active" data-cat="all">✦ ທັງໝົດ</button>
+    <button class="cat-btn" data-cat="sushi">🍣 Sushi-Sashimi</button>
+    <button class="cat-btn" data-cat="noodle">🍜 Noodle</button>
+    <button class="cat-btn" data-cat="steak">🥩 Steak</button>
+    <button class="cat-btn" data-cat="rice">🍱 Rice</button>
+    <button class="cat-btn" data-cat="salad">🥗 Salad</button>
+    <button class="cat-btn" data-cat="fried">🍤 Fried &amp; Snack</button>
+    <button class="cat-btn" data-cat="icecream">🍨 Ice Cream</button>
+    <button class="cat-btn" data-cat="drink">🍵 Drink</button>
+  </nav>
+
+  <main class="main-layout">
+    <section class="menu-section">
+      <div class="menu-grid" id="menuGrid"></div>
+    </section>
+    <aside class="cart-panel" id="cartPanel">
+      <div class="cart-header">
+        <h2 class="cart-title">ລາຍການອາຫານ <span class="jp-sub">メニュー</span></h2>
+        <div class="order-type-toggle">
+          <button class="ot-btn active" id="btnDineIn" onclick="setOrderType('dine-in')">🏮 ກິນຢູ່ຮ້ານ</button>
+          <button class="ot-btn" id="btnDelivery" onclick="setOrderType('delivery')">🛵 ສົ່ງເຮືອນ</button>
+        </div>
+      </div>
+      <div class="customer-info">
+        <div class="info-row"><input type="text" id="customerName" class="info-input" placeholder="ຊື່ລູກຄ້າ / お客様名" /></div>
+        <div class="info-row"><input type="tel" id="customerPhone" class="info-input" placeholder="ເບີໂທ / 電話番号" /></div>
+        <div class="info-row delivery-only hidden" id="addressRow">
+          <input type="text" id="deliveryAddress" class="info-input" placeholder="ທີ່ຢູ່ສົ່ງ / 配達先住所" />
+        </div>
+      </div>
+      <div class="cart-items" id="cartItems">
+        <div class="cart-empty" id="cartEmpty">
+          <span class="empty-icon">🌸</span>
+          <p>ຍັງບໍ່ທັນເລືອກເມນູ</p>
+          <p class="empty-sub">まだ選択されていません</p>
+        </div>
+      </div>
+      <div class="discount-row">
+        <input type="text" id="discountCode" class="discount-input" placeholder="ລະຫັດສ່ວນລົດ / クーポンコード" />
+        <button class="apply-btn" onclick="applyDiscount()">ໃຊ້</button>
+      </div>
+      <div class="discount-msg" id="discountMsg"></div>
+      <div class="cart-totals">
+        <div class="total-row"><span>ລວມກ່ອນສ່ວນລົດ</span><span id="subtotalVal">0 ₭</span></div>
+        <div class="total-row discount-row-display hidden" id="discountDisplay">
+          <span class="discount-text">ສ່ວນລົດ 5%</span>
+          <span class="discount-amt" id="discountAmt">-0 ₭</span>
+        </div>
+        <div class="total-row delivery-only hidden" id="deliveryFeeRow">
+          <span>ຄ່າສົ່ງ</span><span id="deliveryFeeVal">15,000 ₭</span>
+        </div>
+        <div class="total-row grand"><span>ຍອດລວມ 合計</span><span id="grandTotalVal">0 ₭</span></div>
+      </div>
+      <div class="cart-actions">
+        <button class="btn-clear" onclick="clearCart()">🗑 ລ້າງລາຍການທັງໝົດ</button>
+        <button class="btn-checkout" onclick="checkout()">🧾 ອອກໃບບິນ</button>
+      </div>
+    </aside>
+  </main>
+
+  <button class="mobile-cart-fab" id="mobileCartFab" onclick="toggleMobileCart()">
+    🧺 <span id="fabBadge">0</span>
+  </button>
+
+</div>
+
+<script>
+  (function(){
+    const layer=document.getElementById('wPetals');
+    const colors=['rgba(249,200,212,0.8)','rgba(232,160,176,0.7)','rgba(212,118,154,0.65)','rgba(253,232,237,0.75)','rgba(244,192,210,0.7)'];
+    for(let i=0;i<28;i++){
+      const p=document.createElement('div'); p.className='w-fp';
+      const s=6+Math.random()*10;
+      p.style.cssText=`left:${Math.random()*100}%;width:${s}px;height:${s*1.2}px;background:${colors[i%colors.length]};animation-duration:${7+Math.random()*10}s;animation-delay:-${Math.random()*12}s;`;
+      layer.appendChild(p);
+    }
+  })();
+
+  let appInited = false;
+  function enterApp() {
+    const ws = document.getElementById('welcomeScreen');
+    ws.classList.add('hiding');
+    setTimeout(() => {
+      ws.classList.add('gone');
+      const app = document.getElementById('appScreen');
+      app.style.display = 'block';
+      requestAnimationFrame(() => {
+        if (!appInited) { init(); appInited = true; }
+      });
+    }, 800);
+  }
+</script>
+<script src="script.js"></script>
+</body>
+</html>
